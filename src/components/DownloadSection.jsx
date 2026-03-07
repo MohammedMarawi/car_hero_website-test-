@@ -64,11 +64,26 @@ const DownloadSection = () => {
           justifyContent: "center",
         }}
       >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Play Store"
-          style={{ width: "180px", cursor: "pointer" }}
-        />
+        <Box
+          component="a"
+          href="#"
+          sx={{
+            display: "inline-block",
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            borderRadius: "12px",
+            overflow: "hidden",
+            "&:hover": {
+              transform: "translateY(-6px) scale(1.05)",
+              boxShadow: "0 16px 40px rgba(0, 0, 0, 0.3)",
+            },
+          }}
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+            alt="Play Store"
+            style={{ width: "200px", cursor: "pointer", display: "block" }}
+          />
+        </Box>
       </Box>
 
       {/* Updates Title */}

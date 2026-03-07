@@ -32,13 +32,28 @@ const StatisticItem = ({ icon: Icon, value, label, index }) => (
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: "-100%",
+          width: "100%",
+          height: "100%",
+          background: "linear-gradient(90deg, transparent, rgba(143, 92, 177, 0.05), transparent)",
+          transition: "left 0.5s ease",
+        },
         "&:hover": {
-          transform: "translateY(-8px)",
-          boxShadow: "var(--shadow-hover)",
+          transform: "translateY(-10px)",
+          boxShadow: "var(--shadow-hover), 0 0 30px rgba(143, 92, 177, 0.15)",
           borderColor: "var(--primary)",
+          "&::before": {
+            left: "100%",
+          },
           "& .stat-icon": {
-            transform: "scale(1.1) rotate(5deg)",
-            color: "var(--primary)",
+            transform: "scale(1.15) rotate(10deg)",
+            background: "var(--gradient)",
+            color: "white",
+            boxShadow: "0 8px 20px rgba(143, 92, 177, 0.3)",
           },
         },
       }}
@@ -52,7 +67,7 @@ const StatisticItem = ({ icon: Icon, value, label, index }) => (
           background: "var(--input-bg)",
           color: "var(--primary)",
           display: "inline-flex",
-          transition: "all 0.4s ease",
+          transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <Icon sx={{ fontSize: 36 }} />

@@ -238,14 +238,13 @@ const SalientFeatures = () => {
                   width: "100%",
                   maxWidth: "340px",
                   height: "auto",
-                  // Removed borderRadius as it might be causing the "frame" look
-                  // Using a soft lighting glow instead of a dark heavy shadow
-                  filter: "drop-shadow(0 0 30px rgba(143, 92, 177, 0.4))",
-                  transition: "transform 0.4s ease",
+                  filter: "drop-shadow(0 0 40px rgba(143, 92, 177, 0.5))",
+                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   display: "block",
                   mx: "auto",
                   "&:hover": {
-                    transform: "scale(1.05)",
+                    transform: "scale(1.08) rotate(2deg)",
+                    filter: "drop-shadow(0 0 60px rgba(143, 92, 177, 0.6))",
                   },
                 }}
               />

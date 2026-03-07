@@ -78,10 +78,25 @@ const ContactSection = () => {
                         <h3>{t("contact1.send_message")}</h3>
 
                         <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-                            <input type="text" placeholder={t("contact1.full_name")} required />
-                            <input type="email" placeholder={t("contact1.email")} required />
-                            <textarea placeholder={t("contact1.message")} rows={4} required></textarea>
-                            <button type="submit" className="form-submit-btn">
+                            <input 
+                                type="text" 
+                                placeholder={t("contact1.full_name")} 
+                                required 
+                                className="input-enhanced"
+                            />
+                            <input 
+                                type="email" 
+                                placeholder={t("contact1.email")} 
+                                required 
+                                className="input-enhanced"
+                            />
+                            <textarea 
+                                placeholder={t("contact1.message")} 
+                                rows={4} 
+                                required
+                                className="input-enhanced"
+                            ></textarea>
+                            <button type="submit" className="form-submit-btn pulse">
                                 {t("contact1.submit_btn")}
                             </button>
                         </form>

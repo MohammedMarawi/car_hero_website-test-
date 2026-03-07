@@ -12,7 +12,7 @@ const TestimonialCard = ({ name, role, feedback, avatar, rating, index }) => (
     whileInView={{ opacity: 1, scale: 1 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    whileHover={{ y: -5 }}
+    whileHover={{ y: -8 }}
   >
     <Paper
       elevation={0}
@@ -20,20 +20,40 @@ const TestimonialCard = ({ name, role, feedback, avatar, rating, index }) => (
         p: 4,
         height: "100%",
         borderRadius: "24px",
-        background: "rgba(255, 255, 255, 0.03)", // Very subtle base
+        background: "rgba(255, 255, 255, 0.03)",
         backdropFilter: "blur(20px)",
         border: "1px solid var(--border-color)",
         position: "relative",
         overflow: "hidden",
-        transition: "all 0.3s ease",
+        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: "-100%",
+          width: "100%",
+          height: "100%",
+          background: "linear-gradient(90deg, transparent, rgba(143, 92, 177, 0.03), transparent)",
+          transition: "left 0.6s ease",
+        },
         "&:hover": {
           borderColor: "#8f5cb1",
           background: "var(--card-bg)",
-          boxShadow: "0 15px 30px rgba(0,0,0,0.1)",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+          "&::before": {
+            left: "100%",
+          },
           "& .quote-icon": {
             color: "var(--primary)",
             opacity: 0.8,
-            transform: "rotate(180deg) scale(1.1)",
+            transform: "rotate(180deg) scale(1.15)",
+          },
+          "& .avatar-wrapper": {
+            borderColor: "var(--primary-dark)",
+            boxShadow: "0 0 20px rgba(143, 92, 177, 0.3)",
+          },
+          "& .rating-stars": {
+            animation: "sparkle 0.6s ease",
           },
         },
       }}
@@ -47,18 +67,20 @@ const TestimonialCard = ({ name, role, feedback, avatar, rating, index }) => (
           fontSize: 60,
           color: "rgba(143, 92, 177, 0.1)",
           transform: "rotate(180deg)",
-          transition: "all 0.4s ease",
+          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       />
       
       <Box display="flex" flexDirection="column" gap={2} height="100%">
         <Box display="flex" alignItems="center" gap={2}>
           <Avatar
+            className="avatar-wrapper"
             src={avatar}
             sx={{
               width: 56,
               height: 56,
               border: "2px solid #8f5cb1",
+              transition: "all 0.4s ease",
             }}
           >
             {name ? name[0] : '?'}
@@ -73,7 +95,15 @@ const TestimonialCard = ({ name, role, feedback, avatar, rating, index }) => (
           </Box>
         </Box>
 
-        <Rating value={rating} readOnly sx={{ color: "#fbbf24" }} />
+        <Rating 
+          className="rating-stars"
+          value={rating} 
+          readOnly 
+          sx={{ 
+            color: "#fbbf24",
+            transition: "all 0.3s ease",
+          }} 
+        />
 
         <Typography
           variant="body1"

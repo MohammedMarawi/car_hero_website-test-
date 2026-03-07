@@ -107,34 +107,53 @@ const ServiceSection = () => {
                 whileHover={{ y: -8 }}
                 style={{ width: "100%", maxWidth: 360 }}
               >
-                <Paper
-                  elevation={0}
-                  sx={{
-                    borderRadius: "20px",
-                    textAlign: "center",
-                    padding: { xs: "35px 20px", md: "50px 25px" },
-                    transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                    color: "var(--text-dark)",
-                    backgroundColor: "var(--card-bg)",
-                    border: "1px solid var(--border-color)",
-                    height: "100%",
-                    cursor: "pointer",
-                    "&:hover": {
-                      boxShadow: "var(--shadow-hover)",
-                      borderColor: "var(--primary-light)",
-                      transform: "translateY(-6px)",
-                      "& .feature-icon": { 
-                        transform: "scale(1.1)",
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      borderRadius: "20px",
+                      textAlign: "center",
+                      padding: { xs: "35px 20px", md: "50px 25px" },
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      color: "var(--text-dark)",
+                      backgroundColor: "var(--card-bg)",
+                      border: "1px solid var(--border-color)",
+                      height: "100%",
+                      cursor: "pointer",
+                      position: "relative",
+                      overflow: "hidden",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: "-100%",
+                        width: "100%",
+                        height: "100%",
+                        background: "linear-gradient(90deg, transparent, rgba(143, 92, 177, 0.05), transparent)",
+                        transition: "left 0.5s ease",
                       },
-                    },
-                  }}
-                >
+                      "&:hover": {
+                        boxShadow: "var(--shadow-hover)",
+                        borderColor: "var(--primary-light)",
+                        transform: "translateY(-8px)",
+                        "&::before": {
+                          left: "100%",
+                        },
+                        "& .feature-icon": { 
+                          transform: "scale(1.15) rotate(5deg)",
+                          color: "var(--primary-dark)",
+                        },
+                      },
+                    }}
+                  >
                   <Box 
                     className="feature-icon"
                     sx={{ 
                       color: "var(--primary)", 
                       mb: 2.5, 
-                      transition: "all 0.35s ease",
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      "& svg": {
+                        transition: "transform 0.4s ease",
+                      }
                     }}
                   >
                     {feature.icon}

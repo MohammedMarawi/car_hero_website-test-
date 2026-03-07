@@ -167,7 +167,10 @@ const WhyChooseUs = () => {
                   justifyContent: "center",
                   mt: 0.5,
                   flexShrink: 0,
-                  transition: "transform 0.3s ease",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:hover": {
+                    animation: "bounce-subtle 0.5s ease",
+                  },
                 }}
               >
                 <feature.icon fontSize="inherit" />

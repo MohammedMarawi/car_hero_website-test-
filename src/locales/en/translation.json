@@ -24,9 +24,26 @@
 
   "footer": {
     "logoAlt": "CarHero Logo",
-    "tagline": "Your trusted roadside assistance partner",
-    "privacy": "Privacy Policy | Terms & Conditions",
-    "copyright": "© 2025 CarHero – All rights reserved."
+    "tagline": "Your trusted roadside assistance partner. Providing fast, reliable, and professional help wherever you are.",
+    "services": "Our Services",
+    "servicesItems": {
+      "roadside": "Roadside Assistance",
+      "towing": "Towing & Recovery",
+      "battery": "Battery Jumpstart",
+      "fuel": "Fuel Delivery",
+      "tire": "Tire Change"
+    },
+    "quickLinks": "Quick Links",
+    "quickLinksItems": {
+      "partner": "Partner Registration"
+    },
+    "contact": "Contact Us",
+    "contactItems": {
+      "address": "Homs, Syria - Al Hamra Street"
+    },
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms & Conditions",
+    "copyright": "© 2025 CarHero. All rights reserved."
   },
 
   "service": {
@@ -299,5 +316,108 @@
     "password_strong": "Strong",
     "password_very_strong": "Very Strong",
     "success": "Registration submitted successfully!"
+  },
+  "how_it_works": {
+    "title": "How Car Hero Works",
+    "subtitle": "Roadside help in minutes — simple, fast, and reliable.",
+    "steps": [
+      {
+        "title": "Open the App",
+        "description": "Launch the Car Hero mobile app anytime, anywhere."
+      },
+      {
+        "title": "Choose Your Service",
+        "description": "Select the service you need (towing, battery jump, tire change, fuel delivery, maintenance)."
+      },
+      {
+        "title": "Set Your Location",
+        "description": "Share your live GPS location with one tap."
+      },
+      {
+        "title": "Nearest Technician On The Way",
+        "description": "Our system instantly matches you with the closest available professional."
+      },
+      {
+        "title": "Live Tracking & Secure Payment",
+        "description": "Track the technician in real time and pay safely inside the app."
+      }
+    ],
+    "cta": "Get Help Now"
+  },
+  "coverage": {
+    "title": "Service Coverage Map",
+    "subtitle": "Explore our interactive map to see service availability across all Syrian governorates. We are expanding rapidly to reach you wherever you are."
+  },
+
+  "pricing": {
+    "title": "User Plans",
+    "subtitle": "Choose the plan that fits your driving needs.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "free_forever": "Free Forever",
+    "popular": "Recommended",
+    "app_only_note": "Subscription and payment are handled exclusively inside the mobile app.",
+    "cta_app": "Available in the App",
+    "cta_upgrade": "Upgrade via Mobile App",
+    "free": {
+      "name": "Free Plan",
+      "price": "0",
+      "features": [
+        "Basic Roadside Services",
+        "Standard Reward Points",
+        "Text Chat Only",
+        "Distance-based Matching",
+        "1 Vehicle",
+        "Standard Priority"
+      ]
+    },
+    "premium": {
+      "name": "Premium Plan",
+      "price_monthly": "5",
+      "price_yearly": "50",
+      "features": [
+        "Full Services (Maintenance, Wash, etc.)",
+        "Double Reward Points",
+        "Text + Voice Chat",
+        "Rating & Performance Matching",
+        "Unlimited Vehicles",
+        "1 Free Annual Service",
+        "Highest Priority"
+      ]
+    }
+  },
+  "loyalty": {
+    "title": "Earn Points & Unlock Rewards",
+    "subtitle": "Loyalty has its perks — see how Car Hero rewards you.",
+    "how_it_works": {
+      "step1": {
+        "title": "Perform Service",
+        "desc": "Request any service via the app"
+      },
+      "step2": {
+        "title": "Earn Points",
+        "desc": "Points accumulate automatically after each service"
+      },
+      "step3": {
+        "title": "Redeem Rewards",
+        "desc": "Use points for discounts or free services"
+      }
+    },
+    "comparison": {
+      "free": {
+        "name": "Free Plan",
+        "multiplier": "1x Points",
+        "reward": "Standard Rewards",
+        "vehicles": "1 Vehicle"
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "multiplier": "2x Points",
+        "reward": "VIP Rewards & Priority",
+        "vehicles": "Unlimited Vehicles"
+      }
+    },
+    "cta_get_app": "Get the App",
+    "cta_upgrade": "Upgrade to Premium"
   }
 }
