@@ -1,34 +1,44 @@
-import React, { useState } from 'react';
-import { Box, Typography, Container, Grid, Paper, Switch, Tooltip } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
-import { 
-  CheckCircle, 
-  Star, 
-  Chat, 
-  Speed, 
-  DirectionsCar, 
-  EmojiEvents, 
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Paper,
+  Switch,
+  Tooltip,
+} from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import {
+  CheckCircle,
+  Star,
+  Chat,
+  Speed,
+  DirectionsCar,
+  EmojiEvents,
   Verified,
   InfoOutlined,
-  Smartphone
-} from '@mui/icons-material';
+  Smartphone,
+} from "@mui/icons-material";
 
 const PricingPlans = () => {
   const { t, i18n } = useTranslation();
   const [isYearly, setIsYearly] = useState(false);
-  const isRtl = i18n.language === 'ar';
+  const isRtl = i18n.language === "ar";
 
-  const freeFeatures = t('pricing.free.features', { returnObjects: true });
-  const premiumFeatures = t('pricing.premium.features', { returnObjects: true });
+  const freeFeatures = t("pricing.free.features", { returnObjects: true });
+  const premiumFeatures = t("pricing.premium.features", {
+    returnObjects: true,
+  });
 
   const cardVariants = {
     hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
@@ -42,23 +52,26 @@ const PricingPlans = () => {
         transition: "background-color 0.4s ease",
         width: "100%",
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       {/* Background Glow */}
-      <Box sx={{ 
-        position: "absolute", 
-        top: "20%", 
-        left: "-10%", 
-        width: "40%", 
-        height: "40%", 
-        background: "radial-gradient(circle, rgba(143, 92, 177, 0.08) 0%, transparent 70%)",
-        pointerEvents: "none"
-      }} />
+      <Box
+        sx={{
+          position: "absolute",
+          top: "20%",
+          left: "-10%",
+          width: "40%",
+          height: "40%",
+          background:
+            "radial-gradient(circle, rgba(143, 92, 177, 0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
+        <Box sx={{ textAlign: "center", mb: 8 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +88,7 @@ const PricingPlans = () => {
                 letterSpacing: "-1px",
               }}
             >
-              {t('pricing.title')}
+              {t("pricing.title")}
             </Typography>
             <Typography
               sx={{
@@ -84,43 +97,47 @@ const PricingPlans = () => {
                 maxWidth: 600,
                 mx: "auto",
                 lineHeight: 1.7,
-                mb: 4
+                mb: 4,
               }}
             >
-              {t('pricing.subtitle')}
+              {t("pricing.subtitle")}
             </Typography>
 
             {/* Billing Toggle */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 8 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 8 }}>
               <Box
                 sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  backgroundColor: 'var(--card-bg)',
-                  padding: '4px',
-                  borderRadius: '100px',
-                  position: 'relative',
-                  border: '1px solid var(--border-color)',
-                  minWidth: '240px'
+                  display: "inline-flex",
+                  alignItems: "center",
+                  backgroundColor: "var(--card-bg)",
+                  padding: "4px",
+                  borderRadius: "100px",
+                  position: "relative",
+                  border: "1px solid var(--border-color)",
+                  minWidth: "240px",
                 }}
               >
                 {/* Sliding Background */}
                 <Box
                   component={motion.div}
                   animate={{
-                    left: isRtl 
-                      ? (isYearly ? '4px' : 'calc(50% + 2px)') 
-                      : (isYearly ? 'calc(50% + 2px)' : '4px')
+                    left: isRtl
+                      ? isYearly
+                        ? "4px"
+                        : "calc(50% + 2px)"
+                      : isYearly
+                        ? "calc(50% + 2px)"
+                        : "4px",
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   sx={{
-                    position: 'absolute',
-                    top: '4px',
-                    bottom: '4px',
-                    width: 'calc(50% - 6px)',
-                    backgroundColor: 'var(--primary)',
-                    borderRadius: '100px',
-                    zIndex: 1
+                    position: "absolute",
+                    top: "4px",
+                    bottom: "4px",
+                    width: "calc(50% - 6px)",
+                    backgroundColor: "var(--primary)",
+                    borderRadius: "100px",
+                    zIndex: 1,
                   }}
                 />
 
@@ -129,19 +146,19 @@ const PricingPlans = () => {
                   onClick={() => setIsYearly(false)}
                   sx={{
                     flex: 1,
-                    textAlign: 'center',
+                    textAlign: "center",
                     py: 1.5,
                     px: 3,
-                    position: 'relative',
+                    position: "relative",
                     zIndex: 2,
-                    color: !isYearly ? '#fff' : 'var(--text-muted)',
+                    color: !isYearly ? "#fff" : "var(--text-muted)",
                     fontWeight: 700,
-                    transition: 'color 0.3s ease',
-                    cursor: 'pointer',
-                    userSelect: 'none'
+                    transition: "color 0.3s ease",
+                    cursor: "pointer",
+                    userSelect: "none",
                   }}
                 >
-                  {t('pricing.monthly')}
+                  {t("pricing.monthly")}
                 </Box>
 
                 {/* Yearly Option */}
@@ -149,32 +166,32 @@ const PricingPlans = () => {
                   onClick={() => setIsYearly(true)}
                   sx={{
                     flex: 1,
-                    textAlign: 'center',
+                    textAlign: "center",
                     py: 1.5,
                     px: 3,
-                    position: 'relative',
+                    position: "relative",
                     zIndex: 2,
-                    color: isYearly ? '#fff' : 'var(--text-muted)',
+                    color: isYearly ? "#fff" : "var(--text-muted)",
                     fontWeight: 700,
-                    transition: 'color 0.3s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    transition: "color 0.3s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     gap: 1,
-                    cursor: 'pointer',
-                    userSelect: 'none'
+                    cursor: "pointer",
+                    userSelect: "none",
                   }}
                 >
-                  {t('pricing.yearly')}
+                  {t("pricing.yearly")}
                   <Box
                     sx={{
-                      background: '#10b981',
-                      color: '#fff',
+                      background: "#10b981",
+                      color: "#fff",
                       px: 0.8,
                       py: 0.2,
-                      borderRadius: '4px',
-                      fontSize: '11px',
-                      fontWeight: 800
+                      borderRadius: "4px",
+                      fontSize: "11px",
+                      fontWeight: 800,
                     }}
                   >
                     -20%
@@ -185,63 +202,137 @@ const PricingPlans = () => {
           </motion.div>
         </Box>
 
-        <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+        <Grid
+          container
+          spacing={4}
+          justifyContent="center"
+          alignItems="stretch"
+        >
           {/* Free Plan */}
-          <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={5}
+            lg={4.5}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <motion.div
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
-              style={{ display: 'flex', width: '100%', flex: 1 }}
+              style={{ display: "flex", width: "100%", maxWidth: 420 }}
             >
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 4, md: 6 },
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: '32px',
-                  backgroundColor: 'var(--card-bg)',
-                  border: '1px solid var(--border-color)',
-                  transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                  position: 'relative',
-                  '&:hover': {
-                    borderColor: 'var(--primary)',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
-                  }
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: "32px",
+                  backgroundColor: "var(--card-bg)",
+                  border: "1px solid var(--border-color)",
+                  transition:
+                    "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                  position: "relative",
+                  "&:hover": {
+                    borderColor: "var(--primary)",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                  },
                 }}
               >
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{t('pricing.free.name')}</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 4 }}>
-                  <Typography variant="h3" sx={{ fontWeight: 800, color: 'var(--text-dark)' }}>$0</Typography>
-                  <Typography sx={{ color: 'var(--text-muted)', ml: 1 }}>/{t('pricing.monthly').toLowerCase()}</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                  {t("pricing.free.name")}
+                </Typography>
+                <Box sx={{ display: "flex", alignItems: "baseline", mb: 4 }}>
+                  <Typography
+                    variant="h3"
+                    sx={{ fontWeight: 800, color: "var(--text-dark)" }}
+                  >
+                    $0
+                  </Typography>
+                  <Typography sx={{ color: "var(--text-muted)", ml: 1 }}>
+                    /{t("pricing.monthly").toLowerCase()}
+                  </Typography>
                 </Box>
 
                 <Box sx={{ flexGrow: 1 }}>
                   {freeFeatures.map((feature, idx) => (
-                    <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
-                      <CheckCircle sx={{ color: 'var(--primary)', opacity: 0.6, fontSize: 20 }} />
-                      <Typography sx={{ color: 'var(--text-dark)', fontSize: '0.95rem' }}>{feature}</Typography>
+                    <Box
+                      key={idx}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        mb: 2.5,
+                      }}
+                    >
+                      <CheckCircle
+                        sx={{
+                          color: "var(--primary)",
+                          opacity: 0.6,
+                          fontSize: 20,
+                        }}
+                      />
+                      <Typography
+                        sx={{ color: "var(--text-dark)", fontSize: "0.95rem" }}
+                      >
+                        {feature}
+                      </Typography>
                     </Box>
                   ))}
                   {/* Grayed out features for free plan */}
-                  <Box sx={{ mt: 2, pt: 2, borderTop: '1px dashed var(--border-color)', opacity: 0.4 }}>
-                    <Typography variant="caption" sx={{ display: 'block', mb: 1, fontWeight: 700 }}>PREMIUM FEATURES</Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
-                      <CheckCircle sx={{ color: 'var(--text-muted)', fontSize: 18 }} />
-                      <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'line-through' }}>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      pt: 2,
+                      borderTop: "1px dashed var(--border-color)",
+                      opacity: 0.4,
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{ display: "block", mb: 1, fontWeight: 700 }}
+                    >
+                      PREMIUM FEATURES
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        mb: 1.5,
+                      }}
+                    >
+                      <CheckCircle
+                        sx={{ color: "var(--text-muted)", fontSize: 18 }}
+                      />
+                      <Typography
+                        sx={{
+                          color: "var(--text-muted)",
+                          fontSize: "0.85rem",
+                          textDecoration: "line-through",
+                        }}
+                      >
                         {premiumFeatures[0]}
                       </Typography>
                     </Box>
                   </Box>
                 </Box>
 
-                <Box sx={{ mt: 'auto', pt: 4 }}>
-                  <button className="register-btn" style={{ width: '100%', opacity: 0.8, background: 'var(--text-muted)' }}>
-                    {t('pricing.cta_app')}
+                <Box sx={{ mt: "auto", pt: 4 }}>
+                  <button
+                    className="register-btn"
+                    style={{
+                      width: "100%",
+                      opacity: 0.8,
+                      background: "var(--text-muted)",
+                    }}
+                  >
+                    {t("pricing.cta_app")}
                   </button>
                 </Box>
               </Paper>
@@ -249,137 +340,234 @@ const PricingPlans = () => {
           </Grid>
 
           {/* Premium Plan */}
-          <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={5}
+            lg={4.5}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <motion.div
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ y: -15, scale: 1.02 }}
-              style={{ display: 'flex', width: '100%', flex: 1 }}
+              style={{ display: "flex", width: "100%", maxWidth: 420 }}
             >
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 4, md: 6 },
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: '32px',
-                  backgroundColor: 'var(--card-bg)',
-                  border: '2px solid var(--primary)',
-                  transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    borderColor: 'var(--primary-light)',
-                    boxShadow: '0 30px 60px rgba(143, 92, 177, 0.25)',
-                    '&:after': {
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: "32px",
+                  backgroundColor: "var(--card-bg)",
+                  border: "2px solid var(--primary)",
+                  transition:
+                    "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                  position: "relative",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  "&:hover": {
+                    borderColor: "var(--primary-light)",
+                    boxShadow: "0 30px 60px rgba(143, 92, 177, 0.25)",
+                    "&:after": {
                       opacity: 1,
                     },
-                    '& .premium-shine': {
-                      left: '150%',
-                    }
+                    "& .premium-shine": {
+                      left: "150%",
+                    },
                   },
-                  '&:after': {
+                  "&:after": {
                     content: '""',
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    borderRadius: '32px',
-                    border: '2px solid transparent',
-                    background: 'linear-gradient(45deg, var(--primary), transparent, var(--primary)) border-box',
-                    WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-                    WebkitMaskComposite: 'xor',
-                    maskComposite: 'exclude',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: "32px",
+                    border: "2px solid transparent",
+                    background:
+                      "linear-gradient(45deg, var(--primary), transparent, var(--primary)) border-box",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
                     opacity: 0,
-                    transition: 'opacity 0.4s ease',
+                    transition: "opacity 0.4s ease",
                   },
-                  '&:before': {
+                  "&:before": {
                     content: '""',
-                    position: 'absolute',
-                    top: -50, right: -50,
-                    width: '300px', height: '300px',
-                    background: 'radial-gradient(circle, rgba(143, 92, 177, 0.2) 0%, transparent 70%)',
+                    position: "absolute",
+                    top: -50,
+                    right: -50,
+                    width: "300px",
+                    height: "300px",
+                    background:
+                      "radial-gradient(circle, rgba(143, 92, 177, 0.2) 0%, transparent 70%)",
                     zIndex: 0,
-                    transition: 'transform 0.6s ease',
-                  }
+                    transition: "transform 0.6s ease",
+                  },
                 }}
               >
                 {/* Shine effect layer */}
-                <Box 
+                <Box
                   className="premium-shine"
                   sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     top: 0,
-                    left: '-50%',
-                    width: '30%',
-                    height: '100%',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent)',
-                    transform: 'skewX(-20deg)',
-                    transition: 'left 0.8s ease',
+                    left: "-50%",
+                    width: "30%",
+                    height: "100%",
+                    background:
+                      "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent)",
+                    transform: "skewX(-20deg)",
+                    transition: "left 0.8s ease",
                     zIndex: 1,
                   }}
                 />
                 {/* Popular Badge */}
-                <Box sx={{ 
-                  position: 'absolute', 
-                  top: 24, 
-                  [isRtl ? 'left' : 'right']: 24,
-                  backgroundColor: 'var(--primary)',
-                  color: '#fff',
-                  px: 2, py: 0.5,
-                  borderRadius: '50px',
-                  fontSize: '12px',
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  boxShadow: '0 4px 12px rgba(143, 92, 177, 0.3)',
-                  zIndex: 1
-                }}>
-                  {t('pricing.popular')}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 24,
+                    [isRtl ? "left" : "right"]: 24,
+                    backgroundColor: "var(--primary)",
+                    color: "#fff",
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: "50px",
+                    fontSize: "12px",
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    boxShadow: "0 4px 12px rgba(143, 92, 177, 0.3)",
+                    zIndex: 1,
+                  }}
+                >
+                  {t("pricing.popular")}
                 </Box>
 
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'var(--primary)', position: 'relative', zIndex: 1 }}>{t('pricing.premium.name')}</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 4, position: 'relative', zIndex: 1 }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 700,
+                    mb: 1,
+                    color: "var(--primary)",
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
+                  {t("pricing.premium.name")}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    mb: 4,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
                   <AnimatePresence mode="wait">
                     <motion.div
-                      key={isYearly ? 'yearly' : 'monthly'}
+                      key={isYearly ? "yearly" : "monthly"}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      style={{ display: 'flex', alignItems: 'baseline' }}
+                      style={{ display: "flex", alignItems: "baseline" }}
                     >
-                      <Typography variant="h3" sx={{ fontWeight: 800, color: 'var(--text-dark)' }}>
-                        ${isYearly ? t('pricing.premium.price_yearly') : t('pricing.premium.price_monthly')}
+                      <Typography
+                        variant="h3"
+                        sx={{ fontWeight: 800, color: "var(--text-dark)" }}
+                      >
+                        $
+                        {isYearly
+                          ? t("pricing.premium.price_yearly")
+                          : t("pricing.premium.price_monthly")}
                       </Typography>
-                      <Typography sx={{ color: 'var(--text-muted)', ml: 1 }}>
-                        /{isYearly ? t('pricing.yearly').toLowerCase() : t('pricing.monthly').toLowerCase()}
+                      <Typography sx={{ color: "var(--text-muted)", ml: 1 }}>
+                        /
+                        {isYearly
+                          ? t("pricing.yearly").toLowerCase()
+                          : t("pricing.monthly").toLowerCase()}
                       </Typography>
                     </motion.div>
                   </AnimatePresence>
                 </Box>
 
-                <Box sx={{ flexGrow: 1, position: 'relative', zIndex: 1 }}>
+                <Box sx={{ flexGrow: 1, position: "relative", zIndex: 1 }}>
                   {premiumFeatures.map((feature, idx) => (
-                    <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
-                      <CheckCircle sx={{ color: 'var(--primary)', fontSize: 22 }} />
-                      <Typography sx={{ color: 'var(--text-dark)', fontSize: '1rem', fontWeight: 600 }}>{feature}</Typography>
+                    <Box
+                      key={idx}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        mb: 2.5,
+                      }}
+                    >
+                      <CheckCircle
+                        sx={{ color: "var(--primary)", fontSize: 22 }}
+                      />
+                      <Typography
+                        sx={{
+                          color: "var(--text-dark)",
+                          fontSize: "1rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {feature}
+                      </Typography>
                     </Box>
                   ))}
                 </Box>
 
-                <Box sx={{ mt: 'auto', pt: 4, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                  <button className="register-btn" style={{ width: '100%' }}>
-                    {t('pricing.cta_upgrade')}
+                <Box
+                  sx={{
+                    mt: "auto",
+                    pt: 4,
+                    textAlign: "center",
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
+                  <button className="register-btn" style={{ width: "100%" }}>
+                    {t("pricing.cta_upgrade")}
                   </button>
-                  <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-                    <Smartphone sx={{ color: 'var(--text-muted)', fontSize: 16 }} />
-                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
-                      {t('pricing.app_only_note')}
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <Smartphone
+                      sx={{ color: "var(--text-muted)", fontSize: 16 }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "var(--text-muted)" }}
+                    >
+                      {t("pricing.app_only_note")}
                     </Typography>
-                    <Tooltip title={t('pricing.app_only_note')} placement="top" arrow>
-                       <InfoOutlined sx={{ fontSize: 14, color: 'var(--primary)', cursor: 'pointer' }} />
+                    <Tooltip
+                      title={t("pricing.app_only_note")}
+                      placement="top"
+                      arrow
+                    >
+                      <InfoOutlined
+                        sx={{
+                          fontSize: 14,
+                          color: "var(--primary)",
+                          cursor: "pointer",
+                        }}
+                      />
                     </Tooltip>
                   </Box>
                 </Box>

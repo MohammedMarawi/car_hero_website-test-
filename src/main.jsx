@@ -1,4 +1,3 @@
-
 // import React, { useEffect, useMemo, useState } from "react";
 // import ReactDOM from "react-dom/client";
 // import App from "./App.jsx";
@@ -27,12 +26,18 @@
 //   </React.StrictMode>
 // );
 
-import React, { useEffect, useMemo, useState, createContext, useContext } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import "./i18n.js";
-import i18n from "./i18n";  
+import i18n from "./i18n";
 
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
@@ -51,9 +56,9 @@ import { ColorModeContext } from "./ColorModeContext";
 // export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function RootWrapper() {
-  const [lang, setLang] = useState(i18n.language || "en");
+  const [lang, setLang] = useState(i18n.language || "ar");
   const [mode, setMode] = useState(() => {
-    return localStorage.getItem("theme") || "light";
+    return localStorage.getItem("theme") || "dark";
   });
 
   const colorMode = useMemo(
@@ -66,7 +71,7 @@ function RootWrapper() {
         });
       },
     }),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -82,10 +87,10 @@ function RootWrapper() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", mode);
-    if (mode === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (mode === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [mode]);
 
@@ -98,7 +103,10 @@ function RootWrapper() {
       : createCache({ key: "mui" });
   }, [lang]);
 
-  const theme = useMemo(() => getTheme(mode, lang === "ar" ? "rtl" : "ltr"), [mode, lang]);
+  const theme = useMemo(
+    () => getTheme(mode, lang === "ar" ? "rtl" : "ltr"),
+    [mode, lang],
+  );
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -117,5 +125,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <RootWrapper />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
