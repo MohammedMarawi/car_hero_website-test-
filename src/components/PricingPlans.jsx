@@ -212,7 +212,7 @@ const PricingPlans = () => {
           <Grid
             item
             xs={12}
-            sm={6}
+            sm={5}
             md={5}
             lg={4.5}
             sx={{ display: "flex", justifyContent: "center" }}
@@ -223,13 +223,14 @@ const PricingPlans = () => {
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
-              style={{ display: "flex", width: "100%", maxWidth: 420 }}
+              style={{ display: "flex", width: "100%", maxWidth: 400 }}
             >
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 4, md: 6 },
                   width: "100%",
+                  minHeight: { xs: 520, md: 580 },
                   display: "flex",
                   flexDirection: "column",
                   borderRadius: "32px",
@@ -343,7 +344,7 @@ const PricingPlans = () => {
           <Grid
             item
             xs={12}
-            sm={6}
+            sm={5}
             md={5}
             lg={4.5}
             sx={{ display: "flex", justifyContent: "center" }}
@@ -353,14 +354,15 @@ const PricingPlans = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              whileHover={{ y: -15, scale: 1.02 }}
-              style={{ display: "flex", width: "100%", maxWidth: 420 }}
+              whileHover={{ y: -10 }}
+              style={{ display: "flex", width: "100%", maxWidth: 400 }}
             >
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 4, md: 6 },
                   width: "100%",
+                  minHeight: { xs: 520, md: 580 },
                   display: "flex",
                   flexDirection: "column",
                   borderRadius: "32px",

@@ -306,12 +306,15 @@ const SyriaMap = () => {
       <Box
         sx={{
           flex: 1,
-          minHeight: { xs: '450px', md: '550px' },
+          minHeight: { xs: '350px', md: '550px' },
           borderRadius: '20px',
           overflow: 'hidden',
           position: 'relative',
           order: { xs: 1, md: 2 },
-          background: 'transparent'
+          background: 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
         <iframe
@@ -319,7 +322,7 @@ const SyriaMap = () => {
           style={{
             width: '100%',
             height: '100%',
-            minHeight: '550px',
+            minHeight: { xs: '350px', md: '550px' },
             border: 'none',
             background: 'transparent'
           }}
