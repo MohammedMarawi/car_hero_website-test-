@@ -431,27 +431,6 @@ const PricingPlans = () => {
                     zIndex: 1,
                   }}
                 />
-                {/* Popular Badge */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 24,
-                    [isRtl ? "left" : "right"]: 24,
-                    backgroundColor: "var(--primary)",
-                    color: "#fff",
-                    px: 2,
-                    py: 0.5,
-                    borderRadius: "50px",
-                    fontSize: "12px",
-                    fontWeight: 800,
-                    textTransform: "uppercase",
-                    boxShadow: "0 4px 12px rgba(143, 92, 177, 0.3)",
-                    zIndex: 1,
-                  }}
-                >
-                  {t("pricing.popular")}
-                </Box>
-
                 <Typography
                   variant="h5"
                   sx={{

@@ -189,7 +189,7 @@ const LoyaltyRewards = () => {
           spacing={4}
           justifyContent="center"
           alignItems="stretch"
-          sx={{ minHeight: 420 }}
+          sx={{ minHeight: { xs: "auto", md: 420 } }}
         >
           {/* Free Plan Rewards */}
           <Grid
@@ -208,7 +208,7 @@ const LoyaltyRewards = () => {
               <Paper
                 elevation={0}
                 sx={{
-                  p: 4,
+                  p: { xs: 3, sm: 3.5, md: 4 },
                   borderRadius: "24px",
                   backgroundColor: "var(--card-bg)",
                   border: "1px solid var(--border-color)",
@@ -217,11 +217,12 @@ const LoyaltyRewards = () => {
                   position: "relative",
                   overflow: "hidden",
                   width: "100%",
-                  height: "100%",
+                  height: { xs: 390, sm: 390, md: 410 },
+                  minHeight: { xs: 390, sm: 390, md: 410 },
                 }}
               >
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2.5 }}
                 >
                   <TrendingUp sx={{ color: "var(--text-muted)" }} />
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
@@ -229,7 +230,7 @@ const LoyaltyRewards = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 2.5 }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -261,13 +262,13 @@ const LoyaltyRewards = () => {
                   />
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 3, minHeight: { xs: 112, md: 124 } }}>
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      mb: 2,
+                      mb: 1.5,
                     }}
                   >
                     <Speed sx={{ color: "var(--text-muted)", fontSize: 20 }} />
@@ -280,7 +281,7 @@ const LoyaltyRewards = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      mb: 2,
+                      mb: 1.5,
                     }}
                   >
                     <Smartphone
@@ -288,6 +289,22 @@ const LoyaltyRewards = () => {
                     />
                     <Typography sx={{ color: "var(--text-dark)" }}>
                       {t("loyalty.comparison.free.vehicles")}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mt: 1,
+                      minHeight: 18,
+                      visibility: "hidden",
+                    }}
+                    aria-hidden="true"
+                  >
+                    <InfoOutlined sx={{ fontSize: 16 }} />
+                    <Typography variant="caption">
+                      {t("pricing.app_only_note")}
                     </Typography>
                   </Box>
                 </Box>
@@ -327,7 +344,7 @@ const LoyaltyRewards = () => {
               <Paper
                 elevation={0}
                 sx={{
-                  p: 4,
+                  p: { xs: 3, sm: 3.5, md: 4 },
                   borderRadius: "24px",
                   backgroundColor: "var(--card-bg)",
                   border: "2px solid var(--primary)",
@@ -348,11 +365,12 @@ const LoyaltyRewards = () => {
                       "radial-gradient(circle, rgba(143, 92, 177, 0.2) 0%, transparent 70%)",
                   },
                   width: "100%",
-                  height: "100%",
+                  height: { xs: 390, sm: 390, md: 410 },
+                  minHeight: { xs: 390, sm: 390, md: 410 },
                 }}
               >
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2.5 }}
                 >
                   <WorkspacePremium sx={{ color: "var(--primary)" }} />
                   <Typography
@@ -363,7 +381,7 @@ const LoyaltyRewards = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 2.5 }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -401,13 +419,13 @@ const LoyaltyRewards = () => {
                   />
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 3, minHeight: { xs: 112, md: 124 } }}>
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      mb: 2,
+                      mb: 1.5,
                     }}
                   >
                     <Stars sx={{ color: "var(--primary)", fontSize: 24 }} />
@@ -422,7 +440,7 @@ const LoyaltyRewards = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      mb: 2,
+                      mb: 1.5,
                     }}
                   >
                     <TrendingUp

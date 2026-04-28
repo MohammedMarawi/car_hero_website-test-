@@ -306,7 +306,10 @@ const SyriaMap = () => {
       <Box
         sx={{
           flex: 1,
-          minHeight: { xs: '350px', md: '550px' },
+          width: '100%',
+          minWidth: 0,
+          height: { xs: '390px', sm: '440px', md: '550px' },
+          minHeight: { xs: '390px', sm: '440px', md: '550px' },
           borderRadius: '20px',
           overflow: 'hidden',
           position: 'relative',
@@ -317,14 +320,16 @@ const SyriaMap = () => {
           justifyContent: 'center'
         }}
       >
-        <iframe
+        <Box
+          component="iframe"
           src="/maps/syria_choropleth.html"
-          style={{
+          sx={{
             width: '100%',
-            height: '100%',
-            minHeight: { xs: '350px', md: '550px' },
+            height: { xs: '390px', sm: '440px', md: '550px' },
+            minHeight: { xs: '390px', sm: '440px', md: '550px' },
             border: 'none',
-            background: 'transparent'
+            background: 'transparent',
+            display: 'block'
           }}
           title="Syria Coverage Map"
         />
