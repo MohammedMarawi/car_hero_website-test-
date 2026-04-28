@@ -253,6 +253,7 @@ const Navbar = ({ minimal = false }) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const isArabic = i18n.language === "ar";
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
@@ -338,7 +339,13 @@ const Navbar = ({ minimal = false }) => {
           zIndex: 1100,
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2.5, md: 8 } }}>
+        <Toolbar
+          sx={{
+            justifyContent: "space-between",
+            px: { xs: 2.5, md: 8 },
+            flexDirection: { xs: isArabic ? "row-reverse" : "row", md: "row" },
+          }}
+        >
           {/* Logo */}
           <Box
             component="img"
@@ -481,34 +488,6 @@ const Navbar = ({ minimal = false }) => {
 
           {/* Mobile Menu Controls */}
           <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", gap: 1.5 }}>
-            <Box
-              onClick={colorMode.toggleColorMode}
-              sx={{
-                width: 40,
-                height: 40,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                borderRadius: "12px",
-                background: "rgba(143, 92, 177, 0.1)",
-                color: (scrolled && theme.palette.mode === 'light') ? "var(--text-dark)" : "white",
-                transition: "all 0.3s ease",
-              }}
-            >
-              <motion.div
-                key={theme.palette.mode}
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 200 }}
-              >
-                {theme.palette.mode === "dark" ? (
-                  <Brightness7Icon sx={{ color: "#fbbf24", fontSize: 22 }} />
-                ) : (
-                  <Brightness4Icon sx={{ color: "var(--primary)", fontSize: 22 }} />
-                )}
-              </motion.div>
-            </Box>
             {!minimal && (
               <IconButton
                 sx={{
@@ -529,7 +508,7 @@ const Navbar = ({ minimal = false }) => {
 
       {/* Mobile Drawer */}
       <Drawer
-        anchor={i18n.language === 'ar' ? 'left' : 'right'}
+        anchor={isArabic ? "left" : "right"}
         open={open}
         onClose={() => setOpen(false)}
         PaperProps={{
@@ -539,8 +518,8 @@ const Navbar = ({ minimal = false }) => {
               : "rgba(255, 255, 255, 0.98)",
             width: 280,
             backdropFilter: "blur(20px)",
-            borderLeft: i18n.language === 'ar' ? 'none' : "1px solid var(--border-color)",
-            borderRight: i18n.language === 'ar' ? "1px solid var(--border-color)" : 'none',
+            borderLeft: "1px solid var(--border-color)",
+            borderRight: "none",
             color: theme.palette.mode === 'dark' ? "white" : "var(--text-dark)",
             padding: 3,
           },
@@ -584,6 +563,34 @@ const Navbar = ({ minimal = false }) => {
           ))}
 
           <Box sx={{ my: 2, height: "1px", background: "var(--border-color)" }} />
+
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={colorMode.toggleColorMode}
+              sx={{
+                borderRadius: "12px",
+                py: 1.7,
+                justifyContent: "center",
+                border: "1px solid rgba(143, 92, 177, 0.25)",
+                color: "var(--primary)",
+                fontWeight: 700,
+                background: "rgba(143, 92, 177, 0.05)",
+                gap: 1.5,
+                "&:hover": {
+                  background: "rgba(143, 92, 177, 0.12)",
+                },
+              }}
+            >
+              {theme.palette.mode === "dark" ? (
+                <Brightness7Icon sx={{ color: "#fbbf24", fontSize: 22 }} />
+              ) : (
+                <Brightness4Icon sx={{ color: "var(--primary)", fontSize: 22 }} />
+              )}
+              <Typography sx={{ fontWeight: 700 }}>
+                {theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"}
+              </Typography>
+            </ListItemButton>
+          </ListItem>
 
           <ListItem disablePadding>
             <ListItemButton
