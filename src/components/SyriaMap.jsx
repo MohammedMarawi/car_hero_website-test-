@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, TextField, Button, Chip } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -203,10 +203,58 @@ const DefaultPanel = ({ isArabic }) => (
 
 const SyriaMap = () => {
   const { i18n } = useTranslation();
+  const iframeRef = useRef(null);
   const [selectedGov, setSelectedGov] = useState(null);
   const [previewGov, setPreviewGov] = useState(null);
   const [email, setEmail] = useState('');
+  const [govData, setGovData] = useState([]);
   const isArabic = i18n.language === 'ar';
+
+  useEffect(() => {
+    const fetchGovData = async () => {
+      try {
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+        const res = await fetch(`${apiBaseUrl}/providers/public/governorates`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            setGovData(json.data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch governorate data:', err);
+      }
+    };
+    fetchGovData();
+  }, []);
+
+  useEffect(() => {
+    if (iframeRef.current && govData.length > 0) {
+      const iframe = iframeRef.current;
+      const sendData = () => {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.postMessage(
+            {
+              type: 'UPDATE_DATA',
+              data: govData
+            },
+            '*'
+          );
+        }
+      };
+
+      const handleLoad = () => {
+        sendData();
+      };
+
+      iframe.addEventListener('load', handleLoad);
+      sendData();
+
+      return () => {
+        iframe.removeEventListener('load', handleLoad);
+      };
+    }
+  }, [govData]);
 
   useEffect(() => {
     const handleMessage = (event) => {
@@ -321,6 +369,7 @@ const SyriaMap = () => {
         }}
       >
         <Box
+          ref={iframeRef}
           component="iframe"
           src="/maps/syria_choropleth.html"
           sx={{

@@ -11,7 +11,7 @@ const StepSuccess = ({ lang, t, formData }) => {
     const timestamp = new Date().toLocaleString(lang === 'ar' ? 'ar-SY' : 'en-US');
     const fileName = `CarHero_Registration_${formData.businessName.replace(/\s+/g, '_')}.html`;
 
-    const providerType = t.contact.providerOptions[formData.businessType] || formData.businessType;
+    const providerType = t.contact.categoryOptions?.[formData.category] || formData.category;
     const servicesList = formData.serviceType.map(s => t.services.mainServices[s] || s);
     const photosCount = formData.shopPhotos?.length || 0;
 

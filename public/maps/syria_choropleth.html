@@ -362,6 +362,76 @@
             });
             L.marker([city.lat, city.lng], {icon: labelIcon, interactive: false}).addTo(map);
         });
+    
+        // Listen for messages to update governorate values dynamically
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'UPDATE_DATA') {
+                var data = event.data.data;
+                var dataMap = {};
+                if (Array.isArray(data)) {
+                    data.forEach(function(item) {
+                        var govName = item.governorate || item.name || item._id;
+                        dataMap[govName] = item.count !== undefined ? item.count : (item.value !== undefined ? item.value : 0);
+                    });
+                } else if (typeof data === 'object') {
+                    Object.keys(data).forEach(function(key) {
+                        dataMap[key] = data[key];
+                    });
+                }
+                
+                geojsonLayer.eachLayer(function(layer) {
+                    var name = layer.feature.properties.shapeName;
+                    var count = dataMap[name];
+                    
+                    if (count === undefined) {
+                        if (name === "Rural Damascus" || name === "Rular Damascus") {
+                            count = dataMap["Rural Damascus"] || dataMap["Rular Damascus"] || dataMap["ريف دمشق"];
+                        } else if (name === "Damascus") {
+                            count = dataMap["Damascus"] || dataMap["دمشق"];
+                        } else if (name === "Aleppo") {
+                            count = dataMap["Aleppo"] || dataMap["حلب"];
+                        } else if (name === "Homs") {
+                            count = dataMap["Homs"] || dataMap["حمص"];
+                        } else if (name === "Hama") {
+                            count = dataMap["Hama"] || dataMap["حماة"];
+                        } else if (name === "Lattakia") {
+                            count = dataMap["Lattakia"] || dataMap["اللاذقية"];
+                        } else if (name === "Tartous") {
+                            count = dataMap["Tartous"] || dataMap["طرطوس"];
+                        } else if (name === "Idleb") {
+                            count = dataMap["Idleb"] || dataMap["إدلب"];
+                        } else if (name === "Ar-Raqqa") {
+                            count = dataMap["Ar-Raqqa"] || dataMap["الرقة"];
+                        } else if (name === "Deir-ez-Zor") {
+                            count = dataMap["Deir-ez-Zor"] || dataMap["Deir ez-Zor"] || dataMap["دير الزور"];
+                        } else if (name === "Al-Hasakeh") {
+                            count = dataMap["Al-Hasakeh"] || dataMap["الحسكة"];
+                        } else if (name === "Dar'a") {
+                            count = dataMap["Dar'a"] || dataMap["درعا"];
+                        } else if (name === "As-Sweida") {
+                            count = dataMap["As-Sweida"] || dataMap["السويداء"];
+                        } else if (name === "Quneitra") {
+                            count = dataMap["Quneitra"] || dataMap["القنيطرة"];
+                        }
+                    }
+                    
+                    count = count || 0;
+                    layer.feature.properties.value = count;
+                    layer.feature.properties.status = count > 0 ? 'active' : 'coming_soon';
+                });
+                
+                geojsonLayer.setStyle(getDefaultStyle);
+                
+                if (selectedGovernorate) {
+                    var props = selectedGovernorate.feature.properties;
+                    sendToParent('MAP_SELECT', {
+                        governorate: props.shapeName,
+                        status: props.status,
+                        value: props.value
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ const StepAccount = ({ formData, updateFormData, nextStep, isVerified, setIsVeri
   const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(60);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [error, setError] = useState(null);
   
   const otpInputs = useRef([]);
 
@@ -62,14 +63,103 @@ const StepAccount = ({ formData, updateFormData, nextStep, isVerified, setIsVeri
     validate(name, value);
   };
 
-  const sendOtp = () => {
+  const sendOtp = async () => {
     if (!isFieldValid('phone')) return;
-    setIsOtpSent(true);
-    setTimer(60);
-    setOtpValues(['', '', '', '', '', '']);
-    setTimeout(() => {
-       otpInputs.current[0]?.focus();
-    }, 100);
+    setError(null);
+    setIsVerifying(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+      const formattedPhone = `+963${formData.phone.slice(1)}`;
+
+      const res = await fetch(`${apiBaseUrl}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          phoneNumber: formattedPhone,
+          password: formData.password,
+          accountType: 'provider',
+          isTermsAccepted: true,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const msg = data.message || 'Registration failed';
+        if (msg.includes('already exists')) {
+          try {
+            const resendRes = await fetch(`${apiBaseUrl}/auth/resend-otp`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ phoneNumber: formattedPhone }),
+            });
+            if (resendRes.ok) {
+              setIsOtpSent(true);
+              setTimer(60);
+              setOtpValues(['', '', '', '', '', '']);
+              setTimeout(() => {
+                otpInputs.current[0]?.focus();
+              }, 100);
+              return;
+            }
+          } catch (e) {
+            // Ignore fallback resend error, throw original conflict
+          }
+          throw new Error(lang === 'ar' ? 'هذا الرقم مسجل بالفعل. يرجى تسجيل الدخول أو استخدام رقم آخر.' : 'This phone number is already registered. Please log in or use another number.');
+        }
+        throw new Error(msg);
+      }
+
+      setIsOtpSent(true);
+      setTimer(60);
+      setOtpValues(['', '', '', '', '', '']);
+      setTimeout(() => {
+         otpInputs.current[0]?.focus();
+      }, 100);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || (lang === 'ar' ? 'حدث خطأ أثناء إرسال رمز التحقق' : 'Failed to send OTP code'));
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const resendOtpOnly = async () => {
+    setError(null);
+    setIsVerifying(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+      const formattedPhone = `+963${formData.phone.slice(1)}`;
+
+      const res = await fetch(`${apiBaseUrl}/auth/resend-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phoneNumber: formattedPhone }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to resend OTP');
+      }
+
+      setTimer(60);
+      setOtpValues(['', '', '', '', '', '']);
+      setTimeout(() => {
+        otpInputs.current[0]?.focus();
+      }, 100);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || (lang === 'ar' ? 'حدث خطأ أثناء إعادة إرسال رمز التحقق' : 'Failed to resend OTP code'));
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -95,9 +185,38 @@ const StepAccount = ({ formData, updateFormData, nextStep, isVerified, setIsVeri
 
   const verifyOtp = async (code) => {
     setIsVerifying(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsVerified(true);
-    setIsVerifying(false);
+    setError(null);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+      const formattedPhone = `+963${formData.phone.slice(1)}`;
+
+      const res = await fetch(`${apiBaseUrl}/auth/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: formattedPhone,
+          otpCode: code,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || (lang === 'ar' ? 'رمز التحقق غير صحيح' : 'Invalid OTP code'));
+      }
+
+      setIsVerified(true);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || (lang === 'ar' ? 'حدث خطأ أثناء التحقق من الرمز' : 'Failed to verify OTP code'));
+      setOtpValues(['', '', '', '', '', '']);
+      setTimeout(() => {
+        otpInputs.current[0]?.focus();
+      }, 100);
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const isFormValid = () => {
@@ -138,6 +257,12 @@ const StepAccount = ({ formData, updateFormData, nextStep, isVerified, setIsVeri
           {t.account.subtitle && <p className="text-slate-500 dark:text-[#c9a7e3] text-[11px] sm:text-xs font-bold uppercase tracking-wider">{t.account.subtitle}</p>}
         </div>
       </div>
+
+      {error && (
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-xl text-center font-bold text-sm">
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div className="md:col-span-1">
@@ -207,7 +332,7 @@ const StepAccount = ({ formData, updateFormData, nextStep, isVerified, setIsVeri
                 {timer > 0 ? (
                   <span className="text-slate-400 dark:text-white/40">{t.account.resendOtp} ({String(Math.floor(timer/60)).padStart(2,'0')}:{String(timer%60).padStart(2,'0')})</span>
                 ) : (
-                  <button onClick={sendOtp} className="text-violet-600 dark:text-[#d1b3ff] hover:underline flex items-center gap-1.5 active:scale-95">
+                  <button onClick={resendOtpOnly} className="text-violet-600 dark:text-[#d1b3ff] hover:underline flex items-center gap-1.5 active:scale-95">
                     <RotateCw size={14} className="animate-spin-slow" /> {t.account.resendOtp}
                   </button>
                 )}

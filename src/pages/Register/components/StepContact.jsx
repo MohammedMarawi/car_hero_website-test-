@@ -16,7 +16,7 @@ const StepContact = ({ formData, updateFormData, nextStep, prevStep, lang, t }) 
   const validate = (name, value) => {
     let error = '';
     if (name === 'businessName' && (!value || value.trim().length < 2)) error = t.common.required;
-    if (name === 'businessType' && !value) error = t.common.required;
+    if (name === 'category' && !value) error = t.common.required;
     if (name === 'serviceArea' && !value) error = t.errors.selectArea;
     if (name === 'district' && !value) error = t.errors.selectDistrict;
     if (name === 'coverageAreas' && value.length === 0) error = t.errors.minCoverage;
@@ -29,7 +29,7 @@ const StepContact = ({ formData, updateFormData, nextStep, prevStep, lang, t }) 
   const isFieldValid = (name) => {
     const value = formData[name];
     if (name === 'businessName') return value && value.trim().length >= 2;
-    if (name === 'businessType') return !!value;
+    if (name === 'category') return !!value;
     if (name === 'serviceArea') return !!value;
     if (name === 'district') return !!value;
     if (name === 'coverageAreas') return value && value.length > 0;
@@ -95,7 +95,7 @@ const StepContact = ({ formData, updateFormData, nextStep, prevStep, lang, t }) 
   const isFormValid = () => {
     return (
       isFieldValid('businessName') &&
-      isFieldValid('businessType') &&
+      isFieldValid('category') &&
       isFieldValid('serviceArea') &&
       isFieldValid('district') &&
       isFieldValid('location') &&
@@ -135,17 +135,17 @@ const StepContact = ({ formData, updateFormData, nextStep, prevStep, lang, t }) 
         <div className="md:col-span-1">
           <CustomSelect
             label={t.contact.providerType}
-            name="businessType"
-            value={formData.businessType}
+            name="category"
+            value={formData.category}
             options={Object.entries(t.contact.providerOptions).map(([key, label]) => ({ key, label }))}
             onChange={handleChange}
-            onBlur={() => handleBlur('businessType', formData.businessType)}
+            onBlur={() => handleBlur('category', formData.category)}
             placeholder={t.contact.providerTypePlac}
             icon={Briefcase}
             lang={lang}
-            error={errors.businessType}
-            touched={touched.businessType}
-            isValid={isFieldValid('businessType')}
+            error={errors.category}
+            touched={touched.category}
+            isValid={isFieldValid('category')}
           />
         </div>
 

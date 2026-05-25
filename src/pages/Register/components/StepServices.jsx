@@ -49,7 +49,13 @@ const StepServices = ({ formData, updateFormData, nextStep, prevStep, lang, t })
     updateFormData({ facilities: newFacilities });
   };
 
-  const isStepValid = formData.serviceType.length > 0;
+  const isValidPrice = (value) => {
+    const price = Number(value);
+    return Number.isFinite(price) && price > 0;
+  };
+
+  const isStepValid = formData.serviceType.length > 0
+    && formData.serviceType.every((id) => isValidPrice(formData.servicePrices[id]));
 
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -62,21 +68,21 @@ const StepServices = ({ formData, updateFormData, nextStep, prevStep, lang, t })
 
       {/* Emergency Toggle */}
       <button 
-        onClick={() => updateFormData({ emergency247: !formData.emergency247 })}
+        onClick={() => updateFormData({ is_emergency: !formData.is_emergency })}
         className={`w-full flex items-center justify-between p-7 rounded-[24px] border-2 transition-all duration-500 group/emergency ${
-          formData.emergency247 
+          formData.is_emergency 
             ? 'bg-[#8f5cb1] border-[#8f5cb1] text-white shadow-[0_20px_40px_-10px_rgba(143,92,177,0.4)]' 
             : 'bg-[var(--input-bg)] border-[var(--border-color)] text-[var(--text-muted)] hover:border-[#8f5cb1]/60 hover:bg-[var(--bg-section-alt)]'
         }`}
       >
         <div className="flex items-center gap-4">
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${formData.emergency247 ? 'bg-white/20 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'bg-[var(--bg-section-alt)] border border-[var(--border-color)] group-hover/emergency:scale-110 group-hover/emergency:border-[#8f5cb1]/60'}`}>
-                <Zap size={24} className={`${formData.emergency247 ? 'animate-pulse text-white' : 'text-[#8f5cb1] dark:text-[#a57ed8] group-hover/emergency:text-[#8f5cb1] dark:group-hover/emergency:text-[#d1b3ff] transition-colors'}`} />
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${formData.is_emergency ? 'bg-white/20 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'bg-[var(--bg-section-alt)] border border-[var(--border-color)] group-hover/emergency:scale-110 group-hover/emergency:border-[#8f5cb1]/60'}`}>
+                <Zap size={24} className={`${formData.is_emergency ? 'animate-pulse text-white' : 'text-[#8f5cb1] dark:text-[#a57ed8] group-hover/emergency:text-[#8f5cb1] dark:group-hover/emergency:text-[#d1b3ff] transition-colors'}`} />
             </div>
             <span className="font-black text-xl">{t.services.emergency}</span>
         </div>
-        <div className={`w-14 h-8 rounded-full p-1 transition-colors ${formData.emergency247 ? 'bg-white/30' : 'bg-[var(--bg-section-alt)] border border-[var(--border-color)] group-hover/emergency:border-[#8f5cb1]/40'}`}>
-          <div className={`w-6 h-6 rounded-full shadow-sm transition-all duration-300 ${formData.emergency247 ? 'bg-white ' + (lang === 'ar' ? '-translate-x-6' : 'translate-x-6') : 'bg-slate-400 dark:bg-[#8f5cb1]/60'}`}></div>
+        <div className={`w-14 h-8 rounded-full p-1 transition-colors ${formData.is_emergency ? 'bg-white/30' : 'bg-[var(--bg-section-alt)] border border-[var(--border-color)] group-hover/emergency:border-[#8f5cb1]/40'}`}>
+          <div className={`w-6 h-6 rounded-full shadow-sm transition-all duration-300 ${formData.is_emergency ? 'bg-white ' + (lang === 'ar' ? '-translate-x-6' : 'translate-x-6') : 'bg-slate-400 dark:bg-[#8f5cb1]/60'}`}></div>
         </div>
       </button>
 
@@ -112,11 +118,13 @@ const StepServices = ({ formData, updateFormData, nextStep, prevStep, lang, t })
               {isSelected && (
                 <div className="relative animate-in slide-in-from-top-2 duration-300">
                   <input 
-                    type="text" 
+                    type="number" 
+                    min="1"
+                    inputMode="numeric"
                     placeholder={t.services.pricePlac}
                     value={formData.servicePrices[service.id] || ''}
                     onChange={(e) => handlePriceChange(service.id, e.target.value)}
-                    className="w-full bg-[var(--input-bg)] border border-[var(--border-color)] rounded-[12px] py-3 px-10 text-xs font-bold text-[var(--text-dark)] outline-none focus:border-[#8f5cb1] focus:ring-4 focus:ring-[#8f5cb1]/10 transition-all"
+                    className={`w-full bg-[var(--input-bg)] border rounded-[12px] py-3 px-10 text-xs font-bold text-[var(--text-dark)] outline-none focus:border-[#8f5cb1] focus:ring-4 focus:ring-[#8f5cb1]/10 transition-all ${formData.servicePrices[service.id] && !isValidPrice(formData.servicePrices[service.id]) ? 'border-rose-500' : 'border-[var(--border-color)]'}`}
                   />
                   <Coins size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#d1b3ff]/40" />
                 </div>
@@ -190,7 +198,12 @@ const StepServices = ({ formData, updateFormData, nextStep, prevStep, lang, t })
           t={t} 
           description={lang === 'ar' ? 'ارفع شعار الورشة، صور الواجهة، السجل التجاري أو أي وثائق مهنية أخرى' : 'Upload workshop logo, exterior photos, commercial record or any professional documents'} 
           onUpload={(files) => {
-            const newPhotos = files.map(f => URL.createObjectURL(f));
+            const newPhotos = files.map(f => ({
+              name: f.name,
+              size: f.size,
+              type: f.type,
+              previewUrl: URL.createObjectURL(f),
+            }));
             updateFormData({ shopPhotos: [...formData.shopPhotos, ...newPhotos] });
           }} 
           lang={lang} 
@@ -199,7 +212,7 @@ const StepServices = ({ formData, updateFormData, nextStep, prevStep, lang, t })
           <div className="flex flex-wrap gap-4 pt-2">
             {formData.shopPhotos.map((photo, i) => (
               <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-[#8f5cb1]/30 group/img shadow-md animate-in zoom-in duration-300">
-                <img src={photo} className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" alt="upload" />
+                <img src={photo.previewUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" alt={photo.name || 'upload'} />
                 <button 
                   onClick={() => updateFormData({ shopPhotos: formData.shopPhotos.filter((_, idx) => idx !== i) })}
                   className="absolute inset-0 bg-rose-500/80 text-white opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center"

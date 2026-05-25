@@ -24,10 +24,10 @@ const RegisterFlow = () => {
   const [isVerified, setIsVerified] = useState(false);
   // Remove local lang/theme states
   const [formData, setFormData] = useState({
-    fullName: '', businessName: '', businessType: '', email: '', password: '', confirmPassword: '',
+    fullName: '', businessName: '', category: '', email: '', password: '', confirmPassword: '',
     referral: '', phone: '', whatsapp: '', location: '', serviceArea: '', district: '',
     coverageAreas: [], instagram: '', facebook: '',
-    serviceType: [], servicePrices: {}, emergency247: false,
+    serviceType: [], servicePrices: {}, is_emergency: false,
     facilities: [], experienceYears: 0, techCount: 0, additionalInfo: '',
     workingHours: {
       'الأحد': { start: '08:00', end: '18:00', closed: false },

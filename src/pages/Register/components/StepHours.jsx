@@ -1,7 +1,73 @@
-import React from 'react';
-import { Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, Loader2 } from 'lucide-react';
 
 const StepHours = ({ formData, updateFormData, nextStep, prevStep, lang, t }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  const serviceCategoryMap = {
+    mechanical: 'maintenance',
+    electrical: 'maintenance',
+    towing: 'towing',
+    fuel: 'fuel',
+    body: 'maintenance',
+    tires: 'tire',
+    oil: 'maintenance',
+    ac: 'maintenance',
+    detailing: 'car_wash',
+    brakes: 'maintenance',
+    battery: 'battery',
+    suspension: 'maintenance',
+  };
+
+  const serviceMetaMap = {
+    mechanical: { name: 'ميكانيك عام', unit: 'خدمة' },
+    electrical: { name: 'كهرباء وكمبيوتر', unit: 'خدمة' },
+    towing: { name: 'سطحة / إنقاذ', unit: 'خدمة' },
+    fuel: { name: 'توصيل وقود', unit: 'خدمة' },
+    body: { name: 'تجليس وبخ', unit: 'خدمة' },
+    tires: { name: 'إطارات وميزان', unit: 'خدمة' },
+    oil: { name: 'غيار زيت وفلاتر', unit: 'خدمة' },
+    ac: { name: 'تكييف وتبريد', unit: 'خدمة' },
+    detailing: { name: 'غسيل وتلميع', unit: 'خدمة' },
+    brakes: { name: 'فرامل وديسك', unit: 'خدمة' },
+    battery: { name: 'بطاريات وتغيير بطارية', unit: 'خدمة' },
+    suspension: { name: 'دوزان وهيدروليك', unit: 'خدمة' },
+  };
+
+  const parseLocation = (location) => {
+    if (!location) return null;
+    const [lat, lng] = String(location).split(',').map((part) => Number(part.trim()));
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return { latitude: lat, longitude: lng };
+  };
+
+  const normalizePhone = (phone) => {
+    const trimmed = String(phone || '').trim();
+    return trimmed.startsWith('09') ? `+963${trimmed.slice(1)}` : trimmed;
+  };
+
+  const validateWorkingHours = () => {
+    return Object.values(formData.workingHours).every((conf) => {
+      if (conf.closed) return true;
+      return conf.start && conf.end && conf.start < conf.end;
+    });
+  };
+
+  const buildServicesList = () => {
+    return formData.serviceType.map((serviceId) => {
+      const meta = serviceMetaMap[serviceId] || { name: serviceId, unit: 'خدمة' };
+      const price = Number(formData.servicePrices[serviceId]);
+      return {
+        service_id: serviceId,
+        name: meta.name,
+        price,
+        currency: 'SYP_NEW',
+        unit: meta.unit,
+      };
+    });
+  };
+
   const handleToggle = (day) => {
     const newHours = { ...formData.workingHours };
     newHours[day].closed = !newHours[day].closed;
@@ -14,6 +80,80 @@ const StepHours = ({ formData, updateFormData, nextStep, prevStep, lang, t }) =>
     updateFormData({ workingHours: newHours });
   };
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      // Map frontend data to backend CreateProviderDto
+      const workingHoursArray = Object.entries(formData.workingHours).map(([day, conf]) => ({
+        day,
+        open: conf.start,
+        close: conf.end,
+        isClosed: conf.closed
+      }));
+      const coords = parseLocation(formData.location);
+
+      if (!coords) {
+        throw new Error('Missing provider coordinates');
+      }
+      if (!validateWorkingHours()) {
+        throw new Error('Invalid working hours');
+      }
+
+      const serviceCategories = Array.from(
+        new Set(formData.serviceType.map((service) => serviceCategoryMap[service]).filter(Boolean))
+      );
+      const servicesList = buildServicesList();
+
+      if (!servicesList.length || servicesList.some((service) => !Number.isFinite(service.price) || service.price <= 0)) {
+        throw new Error('Invalid service prices');
+      }
+
+      const payload = {
+        phone: normalizePhone(formData.phone),
+        businessName: formData.businessName,
+        ownerName: formData.fullName,
+        email: formData.email,
+        description: formData.additionalInfo || formData.category,
+        category: formData.category,
+        address: formData.district,
+        city: formData.serviceArea,
+        governorate: formData.serviceArea,
+        coverageAreas: formData.coverageAreas,
+        longitude: coords.longitude,
+        latitude: coords.latitude,
+        serviceCategories,
+        services_list: servicesList,
+        is_emergency: formData.is_emergency,
+        facilities: formData.facilities,
+        techCount: formData.techCount,
+        shopPhotos: formData.shopPhotos.map(({ name, size, type }) => ({ name, size, type })),
+        workingHours: workingHoursArray,
+        experienceYears: formData.experienceYears,
+      };
+
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+      const res = await fetch(`${apiBaseUrl}/providers/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to submit application');
+      }
+      
+      nextStep();
+    } catch (err) {
+      console.error(err);
+      setError(lang === 'ar' ? 'حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى' : 'Failed to submit application, please try again');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-10 sm:space-y-12 animate-in zoom-in-95 duration-700">
       <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -24,6 +164,12 @@ const StepHours = ({ formData, updateFormData, nextStep, prevStep, lang, t }) =>
           <h2 className="text-2xl font-black text-[var(--text-dark)] uppercase tracking-tight">{t.hours.title}</h2>
         </div>
       </div>
+
+      {error && (
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-xl text-center font-bold">
+          {error}
+        </div>
+      )}
 
       <div className="space-y-4 sm:space-y-5">
         {Object.entries(formData.workingHours).map(([day, config]) => (
@@ -73,11 +219,18 @@ const StepHours = ({ formData, updateFormData, nextStep, prevStep, lang, t }) =>
 
       <div className="flex flex-col sm:flex-row gap-5 pt-10">
         <button 
-          onClick={nextStep}
-          className="order-1 flex-1 group relative inline-flex items-center justify-center gap-3 px-14 py-5 bg-emerald-600 dark:bg-[#8f5cb1] hover:bg-emerald-700 dark:hover:bg-[#d1b3ff] text-white font-black rounded-[12px] shadow-2xl shadow-emerald-600/20 dark:shadow-[#8f5cb1]/20 transition-all active:scale-[0.98]"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className={`order-1 flex-1 group relative inline-flex items-center justify-center gap-3 px-14 py-5 bg-emerald-600 dark:bg-[#8f5cb1] hover:bg-emerald-700 dark:hover:bg-[#d1b3ff] text-white font-black rounded-[12px] shadow-2xl shadow-emerald-600/20 dark:shadow-[#8f5cb1]/20 transition-all active:scale-[0.98] ${isSubmitting ? 'opacity-70 pointer-events-none' : ''}`}
         >
-          <span>{t.common.send}</span>
-          <span className="transition-transform group-hover:rotate-12 group-hover:scale-125">✓</span>
+          {isSubmitting ? (
+            <Loader2 className="animate-spin w-5 h-5" />
+          ) : (
+            <>
+              <span>{t.common.send}</span>
+              <span className="transition-transform group-hover:rotate-12 group-hover:scale-125">✓</span>
+            </>
+          )}
         </button>
         <button 
           onClick={prevStep}
